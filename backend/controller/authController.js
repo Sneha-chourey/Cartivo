@@ -30,16 +30,18 @@ export const registerUser = async (req, res) => {
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
+  const otp = Math.floor(Math.random() * 900000 + 100000).toString();
     // Create user
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
       role: "user",
+      otp,
     });
+    // newUser.save();
   
-  const otp = Math.floor(Math.random() * 900000 + 100000).toString();
+
 
   const subject = "Verify Your Cartivo Account";
 
@@ -56,8 +58,12 @@ If you did not create this account, you can safely ignore this email.
 Thank you,
 Team Cartivo
 `;
-
+// Wrap sendEmail to isolate the issue
+try {
   await sendEmail(email, subject, message);
+} catch (emailErr) {
+  console.error("Email Error:", emailErr); // ← check your terminal for this
+}
   const token = generateToken(newUser._id);
 
   return res.status(201).json({
@@ -67,8 +73,8 @@ Team Cartivo
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
-        token,
       },
+      token,
     });
 
     
@@ -116,8 +122,9 @@ export const loginUser = async (req, res) => {
           name: user.name,
           email: user.email,
           role: user.role,
-          token,
+         
         },
+         token,
       });
 
     } else {
