@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../model/User.js";
 
-const protect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
   let token;
 
   // Check if token exists in Authorization header
@@ -37,4 +37,3 @@ const protect = async (req, res, next) => {
   }
 };
 
-export default protect;

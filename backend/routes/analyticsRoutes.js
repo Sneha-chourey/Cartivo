@@ -5,7 +5,7 @@ import {
   getUserGrowthStats,
   getRevenueByCategory,
   getDashboardSummary,
-} from "../controllers/analyticsController.js";
+} from "../controller/analyticsController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { admin } from "../middleware/adminMiddleware.js";
 

@@ -6,7 +6,7 @@ import {
   updateOrderToDelivered,
   getMyOrders,
   getAllOrders,
-} from "../controllers/orderController.js";
+} from "../controller/orderController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { admin } from "../middleware/adminMiddleware.js";
 

@@ -3,7 +3,7 @@ import {
   createRazorpayOrder,
   verifyRazorpayPayment,
   getRazorpayKey,
-} from "../controllers/paymentController.js";
+} from "../controller/paymentController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
