@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyOtp, resendOtp, clearError } from "../redux/slices/authSlice";
@@ -41,20 +40,17 @@ const VerifyOtp = () => {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#f9fafb"
+      backgroundColor: "var(--background)"
     }}>
-      <div style={{
-        backgroundColor: "white",
+      <div className="card" style={{
         padding: "2.5rem",
-        borderRadius: "16px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         width: "100%",
         maxWidth: "420px",
         textAlign: "center"
       }}>
-        <h2 style={{ marginBottom: "0.5rem", fontSize: "1.8rem" }}>Verify Email ✉️</h2>
-        <p style={{ color: "#6b7280", marginBottom: "1.5rem" }}>
-          OTP sent to <strong>{registerEmail}</strong>
+        <h2 style={{ marginBottom: "0.5rem", fontSize: "1.5rem", fontWeight: "700", color: "var(--text)" }}>Verify Email ✉️</h2>
+        <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>
+          OTP sent to <strong style={{ color: "var(--text)" }}>{registerEmail}</strong>
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -65,34 +61,16 @@ const VerifyOtp = () => {
             placeholder="Enter 6-digit OTP"
             maxLength={6}
             required
+            className="input"
             style={{
-              width: "100%",
-              padding: "12px",
-              border: "1px solid #d1d5db",
-              borderRadius: "8px",
               fontSize: "1.2rem",
               textAlign: "center",
               letterSpacing: "6px",
-              marginBottom: "1rem",
-              outline: "none"
+              marginBottom: "1rem"
             }}
           />
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "12px",
-              backgroundColor: "#6C63FF",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.7 : 1
-            }}>
+          <button type="submit" disabled={loading} className="btn-primary" style={{ width: "100%", padding: "12px", fontSize: "1rem" }}>
             {loading ? "Verifying..." : "Verify OTP"}
           </button>
         </form>
@@ -104,10 +82,10 @@ const VerifyOtp = () => {
             marginTop: "1rem",
             background: "none",
             border: "none",
-            color: "#6C63FF",
+            color: "var(--primary)",
             cursor: "pointer",
             fontWeight: "600",
-            fontSize: "0.95rem"
+            fontSize: "0.9rem"
           }}>
           Resend OTP
         </button>

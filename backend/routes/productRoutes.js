@@ -7,12 +7,20 @@ import {
   deleteProduct,
   getTopProducts,
 } from "../controller/productController.js";
-import { protect } from "../middleware/authmiddleware.js";
-import { admin } from "../middleware/adminmiddleware.js";
+import {protect} from "../middleware/authMiddleware.js";
+import {admin} from "../middleware/adminMiddleware.js";
 import multer from "multer";
-const upload = multer({dest:'uploads/'});
+import fs from "fs";
+const uploadDir = "uploads/";
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+const upload = multer({ dest: uploadDir });
 
 const router = express.Router();
+router.use((req, res, next) => {
+  console.log("PRODUCT ROUTE HIT:", req.method, req.url);
+  next();
+});
+
 
 // Top rated products
 router.get("/top", getTopProducts);

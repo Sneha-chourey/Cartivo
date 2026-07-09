@@ -16,6 +16,8 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
 import Profile from "./pages/Profile";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 // Admin Pages
 import Dashboard from "./pages/admin/Dashboard";
@@ -25,9 +27,9 @@ import ManageOrders from "./pages/admin/ManageOrders";
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+  <Navbar />
+  <main style={{ flexGrow: 1 }}>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
@@ -43,6 +45,8 @@ function App() {
             <Route path="/order-success/:id" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
             <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />

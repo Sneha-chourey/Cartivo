@@ -1,6 +1,6 @@
 import Product from '../model/Product.js';
-import { cloudinary } from "../config/cloudinary.js";
-
+import { getCloudinary } from "../config/cloudinary.js";
+import fs from "fs";
 // 1. Get all products
 const getProducts = async (req, res) => {
     try {
@@ -28,15 +28,18 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         const { name, description, price, category, stock } = req.body;
-        
-        let imageUrl = '';
-        
-        // Check if a file was uploaded via multer middleware
-        if (req.file) {
-            const result = await cloudinary.uploader.upload(req.file.path);
-            console.log(result);
-            imageUrl = result.secure_url;
+
+        if (!req.file) {
+            return res.status(400).json({ message: "Product image is required" });
         }
+
+        const result = await getCloudinary().uploader.upload(req.file.path);
+        const imageUrl = result.secure_url;
+
+        // clean up temp file
+        fs.unlink(req.file.path, (err) => {
+            if (err) console.error("Temp file cleanup failed:", err.message);
+        });
 
         const product = new Product({
             name,
@@ -44,21 +47,22 @@ const createProduct = async (req, res) => {
             price,
             category,
             stock,
-            images: [imageUrl] // Saves the Cloudinary URL into the images array
+            imageUrl: [imageUrl],
         });
 
         const savedProduct = await product.save();
         res.status(201).json(savedProduct);
-        
+
     } catch (error) {
+        console.error("Create product error:", error.message);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-
+// 4. Update an existing product
 // 4. Update an existing product
 const updateProduct = async (req, res) => {
     try {
-        const { name, description, price, category, stock, images } = req.body;
+        const { name, description, price, category, stock } = req.body;
 
         const product = await Product.findById(req.params.id);
 
@@ -68,10 +72,14 @@ const updateProduct = async (req, res) => {
             product.price = price !== undefined ? price : product.price;
             product.category = category || product.category;
             product.stock = stock || product.stock;
-            if(req.file){
-                const result = await cloudinary.uploader.upload(req.file.path);
-                console.log(result);
-                product.imageUrl=result.secure_url;
+
+            if (req.file) {
+                const result = await getCloudinary().uploader.upload(req.file.path);
+                product.imageUrl = result.secure_url;
+
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error("Temp file cleanup failed:", err.message);
+                });
             }
 
             const updatedProduct = await product.save();
@@ -83,7 +91,6 @@ const updateProduct = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
-
 // 5. Delete a product
 const deleteProduct = async (req, res) => {
     try {

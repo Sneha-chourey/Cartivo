@@ -71,7 +71,7 @@ const Login = () => {
               />
             </div>
 
-            <div style={{ marginBottom: "1.75rem" }}>
+            <div style={{ marginBottom: "0.5rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                 <label className="label" style={{ margin: 0 }}>Password</label>
               </div>
@@ -93,6 +93,12 @@ const Login = () => {
                   {showPass ? "Hide" : "Show"}
                 </button>
               </div>
+            </div>
+
+            <div style={{ textAlign: "right", marginBottom: "1.75rem" }}>
+              <Link to="/forgot-password" style={{ fontSize: "0.85rem", color: "var(--primary)" }}>
+                Forgot Password?
+              </Link>
             </div>
 
             <button type="submit" disabled={loading} className="btn-primary" style={{ width: "100%", padding: "12px", fontSize: "0.95rem" }}>

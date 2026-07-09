@@ -22,7 +22,19 @@ const UserSchema = new mongoose.Schema({
     verified:{
         type:Boolean,
         default:false
-    }
+    },
+    avatar: {
+    type: String,
+    default: ""
+    },
+     otp: {
+    type: String,
+       default: null
+     },
+     otpExpiry: {
+       type: Date,
+       default: null
+     }
 })
 
 

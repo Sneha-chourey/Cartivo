@@ -31,6 +31,7 @@ export const registerUser = async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
   const otp = Math.floor(Math.random() * 900000 + 100000).toString();
+  const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
     // Create user
     const newUser = await User.create({
       name,
@@ -38,6 +39,7 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
       role: "user",
       otp,
+      otpExpiry,
     });
     // newUser.save();
   
@@ -155,3 +157,100 @@ export const getUsers = async(req,res)=>{
   });
 }
 }
+// ================= FORGOT PASSWORD (send OTP) =================
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      // Don't reveal whether the email exists — security best practice
+      return res.status(200).json({
+        message: "If that email exists, a reset OTP has been sent.",
+      });
+    }
+
+    const otp = Math.floor(Math.random() * 900000 + 100000).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    user.otp = otp;
+    user.otpExpiry = otpExpiry;
+    await user.save();
+
+    const subject = "Reset Your Cartivo Password";
+    const message = `Hi ${user.name},
+
+You requested to reset your password.
+
+Your OTP is: ${otp}
+
+This OTP is valid for 10 minutes. If you didn't request this, ignore this email and your password will remain unchanged.
+
+Team Cartivo`;
+
+    try {
+      await sendEmail(email, subject, message);
+    } catch (emailErr) {
+      console.error("Email Error:", emailErr);
+    }
+
+    return res.status(200).json({
+      message: "If that email exists, a reset OTP has been sent.",
+    });
+  } catch (error) {
+    console.error("Forgot Password Error:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// ================= RESET PASSWORD (verify OTP + set new password) =================
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword, confirmPassword } = req.body;
+
+    if (!email || !otp || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.otp || !user.otpExpiry) {
+      return res.status(400).json({ message: "No reset request found. Please request a new OTP." });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (user.otpExpiry < new Date()) {
+      return res.status(400).json({ message: "OTP has expired. Please request a new one." });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.otp = null;
+    user.otpExpiry = null;
+    await user.save();
+
+    return res.status(200).json({ message: "Password reset successful. Please log in." });
+  } catch (error) {
+    console.error("Reset Password Error:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

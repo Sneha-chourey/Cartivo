@@ -9,6 +9,7 @@
   --primary-hover: #4338ca;
   --primary-light: #ede9fe;
   --text: #111827;
+  --text-h: #111827;
   --text-secondary: #6b7280;
   --text-muted: #9ca3af;
   --border: #e5e7eb;
@@ -18,12 +19,17 @@
   --success-light: #d1fae5;
   --error: #dc2626;
   --error-light: #fee2e2;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.10);
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
 }
 
 body {

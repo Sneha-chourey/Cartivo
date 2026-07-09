@@ -5,6 +5,7 @@ import {
   getUserGrowthStats,
   getRevenueByCategory,
   getDashboardSummary,
+  getRecentOrders
 } from "../controller/analyticsController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { admin } from "../middleware/adminMiddleware.js";
@@ -27,5 +28,5 @@ router.get("/user-growth", protect, admin, getUserGrowthStats);
 
 // Revenue broken down by product category
 router.get("/revenue-by-category", protect, admin, getRevenueByCategory);
-
+router.get("/orders/recent", protect, admin, getRecentOrders);
 export default router;

@@ -2,13 +2,29 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import Order from "../model/Order.js";
 import Payment from "../model/Payment.js";
+import Product from "../model/Product.js";
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+let razorpay;
+function getRazorpayInstance() {
+  if (!razorpay) {
+    razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+  }
+  return razorpay;
+}
 
+// @desc    Get Razorpay publishable key
+// @route   GET /api/payment/razorpay-key
+// @access  Private
+const getRazorpayKey = (req, res) => {
+  res.json({ key: process.env.RAZORPAY_KEY_ID });
+};
+
+// @desc    Create Razorpay order
+// @route   POST /api/payment/razorpay/create-order
+// @access  Private
 const createRazorpayOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
@@ -30,7 +46,7 @@ const createRazorpayOrder = async (req, res) => {
     // Razorpay expects amount in paise
     const amountInPaise = Math.round(order.totalPrice * 100);
 
-    const razorpayOrder = await razorpay.orders.create({
+    const razorpayOrder = await getRazorpayInstance().orders.create({
       amount: amountInPaise,
       currency: "INR",
       receipt: `receipt_${orderId}`,
@@ -56,16 +72,16 @@ const createRazorpayOrder = async (req, res) => {
       razorpayOrderId: razorpayOrder.id,
       amount: razorpayOrder.amount,
       currency: razorpayOrder.currency,
-      key: process.env.RAZORPAY_KEY_ID, // sent to frontend to init Razorpay checkout
+      key: process.env.RAZORPAY_KEY_ID,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-const getRazorpayKey = (req, res) => {
-  res.json({ key: process.env.RAZORPAY_KEY_ID });
-};
 
+// @desc    Verify Razorpay payment signature and mark order as paid
+// @route   POST /api/payment/razorpay/verify
+// @access  Private
 const verifyRazorpayPayment = async (req, res) => {
   try {
     const {
@@ -126,14 +142,22 @@ const verifyRazorpayPayment = async (req, res) => {
 
     await order.save();
 
+    // Step 4: Deduct stock after payment verified
+    for (const item of order.orderItems) {
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: { stock: -item.quantity },
+      });
+    }
+
     res.json({ message: "Payment verified successfully", payment });
+
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 // @desc    Get payment details by order ID
-// @route   GET /api/payments/:orderId
+// @route   GET /api/payment/:orderId
 // @access  Private
 const getPaymentByOrder = async (req, res) => {
   try {
@@ -142,9 +166,7 @@ const getPaymentByOrder = async (req, res) => {
     }).populate("order", "totalPrice orderStatus");
 
     if (!payment) {
-      return res
-        .status(404)
-        .json({ message: "Payment not found for this order" });
+      return res.status(404).json({ message: "Payment not found for this order" });
     }
 
     // Only owner or admin can view
@@ -162,7 +184,7 @@ const getPaymentByOrder = async (req, res) => {
 };
 
 // @desc    Refund a payment (admin only)
-// @route   POST /api/payments/:orderId/refund
+// @route   POST /api/payment/:orderId/refund
 // @access  Private/Admin
 const refundPayment = async (req, res) => {
   try {
@@ -173,13 +195,11 @@ const refundPayment = async (req, res) => {
     }
 
     if (payment.status !== "paid") {
-      return res
-        .status(400)
-        .json({ message: "Only paid payments can be refunded" });
+      return res.status(400).json({ message: "Only paid payments can be refunded" });
     }
 
     // Initiate refund via Razorpay
-    const refund = await razorpay.payments.refund(payment.razorpayPaymentId, {
+    const refund = await getRazorpayInstance().payments.refund(payment.razorpayPaymentId, { 
       amount: payment.amount, // full refund in paise
       notes: { reason: req.body.reason || "Requested by admin" },
     });

@@ -41,98 +41,75 @@ const ProductDetail = () => {
 
   if (loading) return <Loader />;
   if (!product) return (
-    <p style={{ textAlign: "center", padding: "2rem" }}>
+    <p style={{ textAlign: "center", padding: "2rem", color: "var(--text-secondary)" }}>
       Product not found!
     </p>
   );
 
   return (
     <div style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          background: "none",
-          border: "1px solid #d1d5db",
-          padding: "8px 16px",
-          borderRadius: "8px",
-          cursor: "pointer",
-          marginBottom: "1.5rem",
-          fontSize: "0.95rem"
-        }}>
+      <button onClick={() => navigate(-1)} className="btn-secondary" style={{ marginBottom: "1.5rem" }}>
         ← Back
       </button>
 
-      <div style={{
+      <div className="card" style={{
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: "2rem",
-        backgroundColor: "white",
-        padding: "2rem",
-        borderRadius: "16px",
-        boxShadow: "0 2px 12px rgba(0,0,0,0.08)"
+        padding: "2rem"
       }}>
-        {/* Image */}
         <img
           src={product.imageUrl?.[0] || "https://via.placeholder.com/400"}
           alt={product.name}
           style={{
             width: "100%",
-            borderRadius: "12px",
+            borderRadius: "var(--radius-lg)",
             objectFit: "cover",
             maxHeight: "400px"
           }}
         />
 
-        {/* Details */}
         <div>
           <p style={{
-            color: "#6C63FF",
+            color: "var(--primary)",
             fontWeight: "600",
-            fontSize: "0.9rem",
+            fontSize: "0.8rem",
             marginBottom: "0.5rem",
-            textTransform: "uppercase"
+            textTransform: "uppercase",
+            letterSpacing: "0.05em"
           }}>
             {product.category}
           </p>
 
           <h1 style={{
-            fontSize: "1.8rem",
-            fontWeight: "bold",
+            fontSize: "1.6rem",
+            fontWeight: "700",
             marginBottom: "1rem",
-            color: "#1f2937"
+            color: "var(--text)"
           }}>
             {product.name}
           </h1>
 
-          {/* Rating */}
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            marginBottom: "1rem"
-          }}>
-            <span style={{ color: "#f59e0b", fontSize: "1.1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "1rem" }}>
+            <span style={{ color: "var(--warning)", fontSize: "1.1rem" }}>
               {"⭐".repeat(Math.round(product.rating))}
             </span>
-            <span style={{ color: "#6b7280", fontSize: "0.9rem" }}>
+            <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
               {product.rating}/5 ({product.numReviews} reviews)
             </span>
           </div>
 
-          {/* Price */}
           <p style={{
-            fontSize: "2.2rem",
-            fontWeight: "bold",
-            color: "#6C63FF",
+            fontSize: "2rem",
+            fontWeight: "700",
+            color: "var(--primary)",
             marginBottom: "1rem"
           }}>
             ₹{product.price}
           </p>
 
-          {/* Description */}
           <p style={{
-            color: "#4b5563",
+            color: "var(--text-secondary)",
             lineHeight: "1.7",
             marginBottom: "1.5rem",
             fontSize: "0.95rem"
@@ -140,56 +117,53 @@ const ProductDetail = () => {
             {product.description}
           </p>
 
-          {/* Stock */}
           <div style={{
             display: "flex",
             alignItems: "center",
             gap: "8px",
             marginBottom: "1.5rem",
             padding: "10px 14px",
-            backgroundColor: product.stock > 0 ? "#f0fdf4" : "#fef2f2",
-            borderRadius: "8px"
+            backgroundColor: product.stock > 0 ? "var(--success-light)" : "var(--error-light)",
+            borderRadius: "var(--radius-md)"
           }}>
             <span style={{
-              color: product.stock > 0 ? "green" : "red",
-              fontWeight: "600"
+              color: product.stock > 0 ? "var(--success)" : "var(--error)",
+              fontWeight: "600",
+              fontSize: "0.9rem"
             }}>
               {product.stock > 0
-                ? `✅ In Stock (${product.stock} items left)`
-                : "❌ Out of Stock"}
+                ? `In Stock (${product.stock} items left)`
+                : "Out of Stock"}
             </span>
           </div>
 
-          {/* Shipping info */}
           <div style={{
-            backgroundColor: "#f9fafb",
+            backgroundColor: "var(--background)",
             padding: "10px 14px",
-            borderRadius: "8px",
+            borderRadius: "var(--radius-md)",
             marginBottom: "1.5rem",
-            fontSize: "0.9rem",
-            color: "#6b7280"
+            fontSize: "0.875rem",
+            color: "var(--text-secondary)",
+            border: "1px solid var(--border)"
           }}>
             🚚 Free shipping on orders above ₹999
           </div>
 
-          {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
             disabled={product.stock === 0}
+            className={product.stock === 0 ? "" : "btn-primary"}
             style={{
               width: "100%",
               padding: "14px",
-              backgroundColor: product.stock === 0 ? "#d1d5db" : "#6C63FF",
-              color: "white",
-              border: "none",
-              borderRadius: "10px",
-              fontSize: "1.1rem",
-              fontWeight: "bold",
-              cursor: product.stock === 0 ? "not-allowed" : "pointer",
-              transition: "opacity 0.2s"
+              backgroundColor: product.stock === 0 ? "var(--border)" : undefined,
+              color: product.stock === 0 ? "var(--text-muted)" : undefined,
+              border: product.stock === 0 ? "none" : undefined,
+              borderRadius: "var(--radius-md)",
+              fontSize: "1rem",
+              fontWeight: "600",
+              cursor: product.stock === 0 ? "not-allowed" : "pointer"
             }}
-            onMouseEnter={e => { if (product.stock > 0) e.target.style.opacity = "0.9" }}
-            onMouseLeave={e => { e.target.style.opacity = "1" }}
           >
             {product.stock === 0 ? "Out of Stock" : "🛒 Add to Cart"}
           </button>

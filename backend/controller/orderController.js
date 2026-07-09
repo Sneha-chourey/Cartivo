@@ -15,9 +15,6 @@ const calcPrices = (orderItems) => {
   return { itemsPrice, shippingPrice, taxPrice, totalPrice };
 };
 
-// @desc    Create new order
-// @route   POST /api/orders
-// @access  Private
 const addOrderItems = async (req, res) => {
   try {
     const { orderItems, shippingAddress, paymentMethod } = req.body;
@@ -57,22 +54,14 @@ const addOrderItems = async (req, res) => {
 
     const createdOrder = await order.save();
 
-   // Move it into verifyRazorpayPayment in paymentController.js, after order.save()
-for (const item of order.orderItems) {
-  await Product.findByIdAndUpdate(item.product, {
-    $inc: { stock: -item.quantity },
-  });
-}
 
     res.status(201).json(createdOrder);
   } catch (error) {
+    console.error("ORDER ERROR:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// @desc    Get order by ID
-// @route   GET /api/orders/:id
-// @access  Private
 const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
@@ -93,13 +82,11 @@ const getOrderById = async (req, res) => {
 
     res.json(order);
   } catch (error) {
+    console.error("ORDER ERROR:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// @desc    Update order to paid (after Razorpay payment confirmation)
-// @route   PUT /api/orders/:id/pay
-// @access  Private
 const updateOrderToPaid = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -132,13 +119,11 @@ const updateOrderToPaid = async (req, res) => {
     const updatedOrder = await order.save();
     res.json(updatedOrder);
   } catch (error) {
+    console.error("ORDER ERROR:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// @desc    Update order to delivered
-// @route   PUT /api/orders/:id/deliver
-// @access  Private/Admin
 const updateOrderToDelivered = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -164,13 +149,11 @@ const updateOrderToDelivered = async (req, res) => {
     const updatedOrder = await order.save();
     res.json(updatedOrder);
   } catch (error) {
+    console.error("ORDER ERROR:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// @desc    Get logged-in user's orders
-// @route   GET /api/orders/mine
-// @access  Private
 const getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id }).sort({
@@ -178,13 +161,11 @@ const getMyOrders = async (req, res) => {
     });
     res.json(orders);
   } catch (error) {
+    console.error("ORDER ERROR:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// @desc    Get all orders (admin)
-// @route   GET /api/orders
-// @access  Private/Admin
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
@@ -192,9 +173,40 @@ const getAllOrders = async (req, res) => {
       .sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
+    console.error("ORDER ERROR:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+// Cancel an order (user can cancel their own order if still processing)
+const cancelOrder = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        // Ensure the logged-in user owns this order
+        if (order.user.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Not authorized to cancel this order' });
+        }
+
+        // Only allow cancellation if not already shipped/delivered/cancelled
+        if (['Shipped', 'Delivered', 'Cancelled'].includes(order.orderStatus)) {
+            return res.status(400).json({ message: `Order cannot be cancelled once it is ${order.status}` });
+        }
+
+        order.orderStatus = 'Cancelled';
+        const updatedOrder = await order.save();
+
+        res.json(updatedOrder);
+    } catch (error) {
+        console.error("Cancel order error:", error.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
 
 export {
   addOrderItems,
@@ -203,4 +215,5 @@ export {
   updateOrderToDelivered,
   getMyOrders,
   getAllOrders,
+  cancelOrder
 };

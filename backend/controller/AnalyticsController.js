@@ -2,7 +2,6 @@ import Order from "../model/Order.js";
 import User from "../model/User.js";
 import Product from "../model/Product.js";
 import Payment from "../model/Payment.js";
-import Analytics from "../model/Analytics.js";
 
 // @desc    Get overall sales summary
 // @route   GET /api/analytics/summary
@@ -13,13 +12,11 @@ const getDashboardSummary = async (req, res) => {
     const paidOrders = await Order.countDocuments({ isPaid: true });
     const deliveredOrders = await Order.countDocuments({ isDelivered: true });
 
-    // Total revenue from paid orders only
     const revenueResult = await Order.aggregate([
       { $match: { isPaid: true } },
       { $group: { _id: null, totalRevenue: { $sum: "$totalPrice" } } },
     ]);
-    const totalRevenue =
-      revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
+    const totalRevenue = revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
     const averageOrderValue = paidOrders > 0 ? totalRevenue / paidOrders : 0;
 
     const totalUsers = await User.countDocuments();
@@ -39,8 +36,8 @@ const getDashboardSummary = async (req, res) => {
   }
 };
 
-// @desc    Get monthly revenue for a given year (for charts)
-// @route   GET /api/analytics/revenue/monthly?year=2024
+// @desc    Get monthly revenue for a given year
+// @route   GET /api/analytics/sales?year=2024
 // @access  Private/Admin
 const getSalesAnalytics = async (req, res) => {
   try {
@@ -66,7 +63,6 @@ const getSalesAnalytics = async (req, res) => {
       { $sort: { "_id.month": 1 } },
     ]);
 
-    // Fill in all 12 months (even if 0 revenue)
     const months = Array.from({ length: 12 }, (_, i) => {
       const found = monthlyData.find((d) => d._id.month === i + 1);
       return {
@@ -83,7 +79,7 @@ const getSalesAnalytics = async (req, res) => {
 };
 
 // @desc    Get top selling products
-// @route   GET /api/analytics/products/top?limit=5
+// @route   GET /api/analytics/top-products?limit=5
 // @access  Private/Admin
 const getTopSellingProducts = async (req, res) => {
   try {
@@ -98,9 +94,7 @@ const getTopSellingProducts = async (req, res) => {
           name: { $first: "$orderItems.name" },
           unitsSold: { $sum: "$orderItems.quantity" },
           revenue: {
-            $sum: {
-              $multiply: ["$orderItems.price", "$orderItems.quantity"],
-            },
+            $sum: { $multiply: ["$orderItems.price", "$orderItems.quantity"] },
           },
         },
       },
@@ -115,7 +109,7 @@ const getTopSellingProducts = async (req, res) => {
 };
 
 // @desc    Get revenue breakdown by category
-// @route   GET /api/analytics/categories
+// @route   GET /api/analytics/revenue-by-category
 // @access  Private/Admin
 const getRevenueByCategory = async (req, res) => {
   try {
@@ -135,9 +129,7 @@ const getRevenueByCategory = async (req, res) => {
         $group: {
           _id: "$productDetails.category",
           revenue: {
-            $sum: {
-              $multiply: ["$orderItems.price", "$orderItems.quantity"],
-            },
+            $sum: { $multiply: ["$orderItems.price", "$orderItems.quantity"] },
           },
           unitsSold: { $sum: "$orderItems.quantity" },
         },
@@ -152,7 +144,7 @@ const getRevenueByCategory = async (req, res) => {
 };
 
 // @desc    Get new user registrations per month
-// @route   GET /api/analytics/users/growth?year=2024
+// @route   GET /api/analytics/user-growth?year=2024
 // @access  Private/Admin
 const getUserGrowthStats = async (req, res) => {
   try {
@@ -208,7 +200,7 @@ const getRecentOrders = async (req, res) => {
 };
 
 // @desc    Get payment method breakdown
-// @route   GET /api/analytics/payments/methods
+// @route   GET /api/analytics/payment-methods
 // @access  Private/Admin
 const getPaymentMethodStats = async (req, res) => {
   try {
