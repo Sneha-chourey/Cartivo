@@ -5,7 +5,7 @@ import {
   changePassword,
   updateAvatar,
   deleteUserAccount,
-} from "../controller/userController.js";
+} from "../controller/UserController.js";
 import { forgotPassword, resetPassword } from "../controller/authController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import multer from "multer";
