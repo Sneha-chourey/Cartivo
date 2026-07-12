@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,39 +7,63 @@
 }
 
 :root {
-  --primary: #5046e5;
-  --primary-hover: #4338ca;
-  --primary-light: #ede9fe;
-  --text: #111827;
-  --text-h: #111827;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --border: #e5e7eb;
-  --background: #f9fafb;
-  --white: #ffffff;
-  --success: #059669;
-  --success-light: #d1fae5;
-  --error: #dc2626;
-  --error-light: #fee2e2;
-  --warning: #d97706;
-  --warning-light: #fef3c7;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.10);
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  /* Brand palette — warm brass & stone, inspired by temple bronze and dim altar light */
+  --primary: #C9A227;
+  --primary-hover: #B08D1F;
+  --primary-light: rgba(201, 162, 39, 0.14);
+
+  --secondary: #7A2E2E;
+  --secondary-light: rgba(122, 46, 46, 0.14);
+
+  --text: #F5EFE6;
+  --text-h: #FFFDF8;
+  --text-secondary: #C9BFAE;
+  --text-muted: #948A78;
+
+  --border: #362F29;
+  --background: #15120F;
+  --surface: #1C1815;
+  --white: #221D18;
+  /* "white" is kept as a token name for compatibility with existing components,
+     but on this dark theme it maps to the elevated surface color, not literal white */
+
+  --success: #6FA26A;
+  --success-light: rgba(111, 162, 106, 0.14);
+  --error: #C1524B;
+  --error-light: rgba(193, 82, 75, 0.14);
+  --warning: #C9A227;
+  --warning-light: rgba(201, 162, 39, 0.14);
+
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--background);
   color: var(--text);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  color: var(--text-h);
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -75,13 +101,14 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: var(--primary);
-  color: white;
+  color: #1C1815;
   border: none;
   border-radius: var(--radius-md);
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.1s ease;
 }
@@ -95,7 +122,7 @@ textarea {
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -104,23 +131,24 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
-  background-color: var(--white);
+  padding: 12px 24px;
+  background-color: transparent;
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .btn-secondary:hover {
-  background-color: var(--background);
+  border-color: var(--primary);
+  background-color: var(--primary-light);
 }
 
 .card {
-  background: var(--white);
+  background: var(--surface);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
@@ -128,26 +156,30 @@ textarea {
 
 .input {
   width: 100%;
-  padding: 10px 14px;
+  padding: 11px 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 0.95rem;
   color: var(--text);
-  background: var(--white);
+  background: var(--surface);
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+.input::placeholder {
+  color: var(--text-muted);
+}
+
 .input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(80, 70, 229, 0.1);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
 }
 
 .label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  color: var(--text);
+  color: var(--text-secondary);
   margin-bottom: 6px;
 }
 
@@ -171,11 +203,20 @@ textarea {
 }
 
 .badge-warning {
-  background: #fef3c7;
-  color: #d97706;
+  background: var(--warning-light);
+  color: var(--warning);
 }
 
 .badge-primary {
   background: var(--primary-light);
   color: var(--primary);
+}
+
+/* Thin gold divider — signature detail used sparingly between sections */
+.gold-rule {
+  width: 48px;
+  height: 2px;
+  background: var(--primary);
+  border: none;
+  margin: 0 auto 1.5rem;
 }

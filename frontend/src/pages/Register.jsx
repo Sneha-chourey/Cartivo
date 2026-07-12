@@ -25,18 +25,39 @@ const Register = () => {
 
   return (
     <div style={{ minHeight: "calc(100vh - 60px)", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-      {/* Left */}
-      <div style={{ backgroundColor: "var(--primary)", padding: "3rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <div style={{ maxWidth: "400px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "700", fontSize: "1.3rem", color: "white", marginBottom: "3rem" }}>
-            <span style={{ backgroundColor: "white", color: "var(--primary)", width: "36px", height: "36px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800" }}>C</span>
+      {/* Left — dark surface with gold accents, not a solid gold fill */}
+      <div style={{
+        backgroundColor: "var(--surface)",
+        borderRight: "1px solid var(--border)",
+        padding: "3rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden"
+      }}>
+        {/* Subtle ambient glow — same signature accent used across Home and Login */}
+        <div style={{
+          position: "absolute",
+          top: "-140px",
+          left: "-100px",
+          width: "420px",
+          height: "420px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(201,162,39,0.12) 0%, rgba(201,162,39,0) 70%)",
+          pointerEvents: "none"
+        }} />
+
+        <div style={{ maxWidth: "400px", position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-display)", fontWeight: "700", fontSize: "1.3rem", color: "var(--text-h)", marginBottom: "3rem" }}>
+            <span style={{ backgroundColor: "var(--primary)", color: "#1C1815", width: "36px", height: "36px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800" }}>C</span>
             Cartivo
           </div>
-          <h2 style={{ fontSize: "2rem", fontWeight: "700", color: "white", marginBottom: "1rem" }}>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: "700", color: "var(--text-h)", marginBottom: "1rem" }}>
             Start shopping today
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1rem", lineHeight: "1.6", marginBottom: "2.5rem" }}>
-            Create a free account and get access to thousands of products.
+          <p style={{ color: "var(--text-secondary)", fontSize: "1rem", lineHeight: "1.6", marginBottom: "2.5rem" }}>
+            Create a free account and get access to handcrafted pieces made for your home.
           </p>
           {[
             { icon: "✅", text: "Free account, no credit card needed" },
@@ -46,7 +67,7 @@ const Register = () => {
           ].map((item, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
               <span>{item.icon}</span>
-              <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.9rem" }}>{item.text}</span>
+              <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>{item.text}</span>
             </div>
           ))}
         </div>
@@ -55,7 +76,7 @@ const Register = () => {
       {/* Right */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "3rem", backgroundColor: "var(--background)" }}>
         <div style={{ width: "100%", maxWidth: "400px" }}>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "0.5rem" }}>Create account</h1>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: "700", marginBottom: "0.5rem", color: "var(--text-h)" }}>Create account</h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: "2rem" }}>
             Already have an account?{" "}
             <Link to="/login" style={{ color: "var(--primary)", fontWeight: "500" }}>Sign in</Link>

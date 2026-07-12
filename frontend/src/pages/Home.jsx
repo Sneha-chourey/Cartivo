@@ -27,57 +27,72 @@ const Home = () => {
     <div>
       {/* Hero */}
       <div style={{
-        backgroundColor: "var(--white)",
+        position: "relative",
+        backgroundColor: "var(--background)",
         borderBottom: "1px solid var(--border)",
-        padding: "5rem 2rem",
-        textAlign: "center"
+        padding: "6rem 2rem 5rem",
+        textAlign: "center",
+        overflow: "hidden"
       }}>
-        <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+        {/* Ambient brass glow — signature element, subtle warm light like a diya behind an idol */}
+        <div style={{
+          position: "absolute",
+          top: "-120px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "560px",
+          height: "560px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(201,162,39,0.16) 0%, rgba(201,162,39,0) 70%)",
+          pointerEvents: "none"
+        }} />
+
+        <div style={{ position: "relative", maxWidth: "660px", margin: "0 auto" }}>
           <span style={{
             display: "inline-block",
-            backgroundColor: "var(--primary-light)",
             color: "var(--primary)",
-            fontSize: "0.8rem",
+            fontSize: "0.75rem",
             fontWeight: "600",
-            padding: "4px 14px",
-            borderRadius: "var(--radius-full)",
             marginBottom: "1.5rem",
-            letterSpacing: "0.05em",
+            letterSpacing: "0.18em",
             textTransform: "uppercase"
           }}>
-            New Arrivals Available
+            Handcrafted · Thoughtfully Made
           </span>
           <h1 style={{
-            fontSize: "3rem",
+            fontFamily: "var(--font-display)",
+            fontSize: "3.2rem",
             fontWeight: "700",
-            color: "var(--text)",
-            lineHeight: "1.2",
-            marginBottom: "1.25rem",
-            letterSpacing: "-0.02em"
+            color: "var(--text-h)",
+            lineHeight: "1.25",
+            marginBottom: "1.25rem"
           }}>
-            Shop smarter,<br />
-            <span style={{ color: "var(--primary)" }}>live better</span>
+            Everyday pieces,<br />crafted with care
           </h1>
           <p style={{
-            fontSize: "1.1rem",
+            fontSize: "1.05rem",
             color: "var(--text-secondary)",
-            marginBottom: "2rem",
-            lineHeight: "1.6"
+            marginBottom: "2.25rem",
+            lineHeight: "1.7",
+            maxWidth: "480px",
+            marginLeft: "auto",
+            marginRight: "auto"
           }}>
-            Discover thousands of products with fast delivery, secure payments, and easy returns.
+            From deity idols to kitchenware and home essentials — curated
+            pieces that bring warmth and character to every corner of your home.
           </p>
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+          <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
             <button
               onClick={() => navigate("/products")}
               className="btn-primary"
-              style={{ padding: "12px 28px", fontSize: "1rem" }}
+              style={{ padding: "13px 30px", fontSize: "0.95rem" }}
             >
-              Browse Products →
+              Explore Collection →
             </button>
             <button
               onClick={() => navigate("/register")}
               className="btn-secondary"
-              style={{ padding: "12px 28px", fontSize: "1rem" }}
+              style={{ padding: "13px 30px", fontSize: "0.95rem" }}
             >
               Create Account
             </button>
@@ -85,55 +100,71 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Trust strip — honest, no invented numbers */}
       <div style={{
-        backgroundColor: "var(--primary)",
-        padding: "2rem",
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: "1rem",
-        textAlign: "center"
+        backgroundColor: "var(--surface)",
+        borderBottom: "1px solid var(--border)",
+        padding: "1.75rem 2rem"
       }}>
-        {[
-          { value: "10,000+", label: "Products" },
-          { value: "50,000+", label: "Happy Customers" },
-          { value: "99.9%", label: "Uptime" },
-          { value: "24/7", label: "Support" },
-        ].map((stat, i) => (
-          <div key={i}>
-            <p style={{ fontSize: "1.6rem", fontWeight: "700", color: "white", marginBottom: "4px" }}>{stat.value}</p>
-            <p style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.7)" }}>{stat.label}</p>
-          </div>
-        ))}
+        <div style={{
+          maxWidth: "1100px",
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "1.5rem",
+          textAlign: "center"
+        }}>
+          {[
+            { icon: "✦", label: "Hand-carved by artisans" },
+            { icon: "⌂", label: "Pan-India shipping" },
+            { icon: "◈", label: "Secure Razorpay checkout" },
+            { icon: "↺", label: "7-day easy returns" },
+          ].map((item, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+              <span style={{ color: "var(--primary)", fontSize: "1.1rem" }}>{item.icon}</span>
+              <span style={{ color: "var(--text-secondary)", fontSize: "0.85rem", fontWeight: "500" }}>{item.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Features */}
-      <div style={{ padding: "4rem 2rem", backgroundColor: "var(--background)" }}>
+      <div style={{ padding: "5rem 2rem", backgroundColor: "var(--background)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <hr className="gold-rule" />
+            <h2 style={{ fontSize: "1.75rem", fontWeight: "600", marginBottom: "0.5rem" }}>
+              Why Cartivo
+            </h2>
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
+              Every piece is chosen for the craft behind it
+            </p>
+          </div>
+
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             gap: "1.5rem"
           }}>
             {[
-              { icon: "🚚", title: "Free Shipping", desc: "On all orders above ₹999. No hidden charges." },
-              { icon: "🔒", title: "Secure Payments", desc: "Powered by Razorpay. 100% safe and encrypted." },
-              { icon: "↩️", title: "Easy Returns", desc: "Not happy? Return within 7 days, no questions asked." },
+              { icon: "🪔", title: "Handcrafted Quality", desc: "Each piece is shaped and finished by skilled artisans, never mass-produced." },
+              { icon: "🔒", title: "Secure Payments", desc: "Checkout safely with Razorpay — encrypted, trusted, and instant." },
+              { icon: "↩︎", title: "Easy Returns", desc: "Not the right fit for your space? Return within 7 days, hassle-free." },
             ].map((feature, i) => (
-              <div key={i} className="card" style={{ padding: "1.75rem" }}>
+              <div key={i} className="card" style={{ padding: "2rem" }}>
                 <div style={{
-                  width: "48px",
-                  height: "48px",
-                  backgroundColor: "var(--primary-light)",
-                  borderRadius: "12px",
+                  width: "44px",
+                  height: "44px",
+                  border: "1px solid var(--border)",
+                  borderRadius: "10px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "1.5rem",
-                  marginBottom: "1rem"
+                  fontSize: "1.3rem",
+                  marginBottom: "1.25rem"
                 }}>{feature.icon}</div>
-                <h3 style={{ fontWeight: "600", marginBottom: "6px", fontSize: "1rem" }}>{feature.title}</h3>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", lineHeight: "1.6" }}>{feature.desc}</p>
+                <h3 style={{ fontFamily: "var(--font-display)", fontWeight: "600", marginBottom: "8px", fontSize: "1.1rem" }}>{feature.title}</h3>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: "1.7" }}>{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -141,12 +172,12 @@ const Home = () => {
       </div>
 
       {/* Top Products */}
-      <div style={{ padding: "2rem 2rem 5rem", backgroundColor: "var(--white)" }}>
+      <div style={{ padding: "1rem 2rem 5rem", backgroundColor: "var(--background)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
             <div>
-              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "4px" }}>Top Rated Products</h2>
-              <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)" }}>Handpicked by our customers</p>
+              <h2 style={{ fontSize: "1.6rem", fontWeight: "600", marginBottom: "6px" }}>Most Loved Pieces</h2>
+              <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)" }}>Chosen and cherished by our customers</p>
             </div>
             <button onClick={() => navigate("/products")} className="btn-secondary" style={{ fontSize: "0.875rem" }}>
               View All →
@@ -155,8 +186,8 @@ const Home = () => {
 
           {loading ? <Loader /> : topProducts.length === 0 ? (
             <div style={{ textAlign: "center", padding: "4rem", color: "var(--text-secondary)" }}>
-              <p style={{ fontSize: "2rem", marginBottom: "1rem" }}>📦</p>
-              <p>No products yet. Check back soon!</p>
+              <p style={{ fontSize: "2rem", marginBottom: "1rem" }}>🪔</p>
+              <p>New pieces are being crafted. Check back soon.</p>
             </div>
           ) : (
             <div style={{
@@ -174,21 +205,23 @@ const Home = () => {
 
       {/* CTA Banner */}
       <div style={{
-        backgroundColor: "var(--primary)",
-        padding: "4rem 2rem",
+        backgroundColor: "var(--surface)",
+        borderTop: "1px solid var(--border)",
+        padding: "4.5rem 2rem",
         textAlign: "center"
       }}>
-        <h2 style={{ fontSize: "1.8rem", fontWeight: "700", color: "white", marginBottom: "0.75rem" }}>
-          Ready to start shopping?
+        <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.9rem", fontWeight: "600", color: "var(--text-h)", marginBottom: "0.75rem" }}>
+          Find the piece that belongs in your home
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.8)", marginBottom: "1.5rem", fontSize: "1rem" }}>
-          Join thousands of happy customers today.
+        <p style={{ color: "var(--text-secondary)", marginBottom: "1.75rem", fontSize: "1rem" }}>
+          Create an account to save favorites and track your orders.
         </p>
         <button
           onClick={() => navigate("/register")}
-          style={{ padding: "12px 32px", backgroundColor: "white", color: "var(--primary)", border: "none", borderRadius: "var(--radius-md)", fontWeight: "600", fontSize: "1rem", cursor: "pointer" }}
+          className="btn-primary"
+          style={{ padding: "13px 32px", fontSize: "0.95rem" }}
         >
-          Get Started Free
+          Get Started
         </button>
       </div>
     </div>

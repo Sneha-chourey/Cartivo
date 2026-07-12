@@ -23,17 +23,39 @@ const Login = () => {
 
   return (
     <div style={{ minHeight: "calc(100vh - 60px)", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-      {/* Left Panel */}
-      <div style={{ backgroundColor: "var(--primary)", padding: "3rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start" }}>
-        <div style={{ maxWidth: "400px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "700", fontSize: "1.3rem", color: "white", marginBottom: "3rem" }}>
-            <span style={{ backgroundColor: "white", color: "var(--primary)", width: "36px", height: "36px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800" }}>C</span>
+      {/* Left Panel — dark surface with gold accents, not a solid gold fill */}
+      <div style={{
+        backgroundColor: "var(--surface)",
+        borderRight: "1px solid var(--border)",
+        padding: "3rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        position: "relative",
+        overflow: "hidden"
+      }}>
+        {/* Subtle ambient glow, same signature as Home hero — restrained accent, not a flat fill */}
+        <div style={{
+          position: "absolute",
+          top: "-140px",
+          left: "-100px",
+          width: "420px",
+          height: "420px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(201,162,39,0.12) 0%, rgba(201,162,39,0) 70%)",
+          pointerEvents: "none"
+        }} />
+
+        <div style={{ maxWidth: "400px", position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-display)", fontWeight: "700", fontSize: "1.3rem", color: "var(--text-h)", marginBottom: "3rem" }}>
+            <span style={{ backgroundColor: "var(--primary)", color: "#1C1815", width: "36px", height: "36px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800" }}>C</span>
             Cartivo
           </div>
-          <h2 style={{ fontSize: "2rem", fontWeight: "700", color: "white", marginBottom: "1rem", lineHeight: "1.3" }}>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: "700", color: "var(--text-h)", marginBottom: "1rem", lineHeight: "1.3" }}>
             Welcome back to Cartivo
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1rem", lineHeight: "1.6", marginBottom: "2.5rem" }}>
+          <p style={{ color: "var(--text-secondary)", fontSize: "1rem", lineHeight: "1.6", marginBottom: "2.5rem" }}>
             Sign in to continue shopping and track your orders.
           </p>
           {[
@@ -43,7 +65,7 @@ const Login = () => {
           ].map((item, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
               <span style={{ fontSize: "1.1rem" }}>{item.icon}</span>
-              <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.9rem" }}>{item.text}</span>
+              <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>{item.text}</span>
             </div>
           ))}
         </div>
@@ -52,7 +74,7 @@ const Login = () => {
       {/* Right Panel */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "3rem", backgroundColor: "var(--background)" }}>
         <div style={{ width: "100%", maxWidth: "400px" }}>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "0.5rem", color: "var(--text)" }}>Sign in</h1>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: "700", marginBottom: "0.5rem", color: "var(--text-h)" }}>Sign in</h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: "2rem" }}>
             Don't have an account?{" "}
             <Link to="/register" style={{ color: "var(--primary)", fontWeight: "500" }}>Create one free</Link>

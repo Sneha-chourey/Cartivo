@@ -43,7 +43,7 @@ const ProductList = () => {
     <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem" }}>
       {/* Header */}
       <div style={{ marginBottom: "2rem" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "4px" }}>All Products</h1>
+        <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", fontWeight: "700", marginBottom: "4px" }}>All Products</h1>
         <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
           {filtered.length} products found
         </p>
@@ -88,10 +88,10 @@ const ProductList = () => {
               borderRadius: "var(--radius-full)",
               border: "1px solid",
               borderColor: category === cat ? "var(--primary)" : "var(--border)",
-              backgroundColor: category === cat ? "var(--primary)" : "var(--white)",
-              color: category === cat ? "white" : "var(--text-secondary)",
+              backgroundColor: category === cat ? "var(--primary)" : "var(--surface)",
+              color: category === cat ? "#1C1815" : "var(--text-secondary)",
               fontSize: "0.8rem",
-              fontWeight: "500",
+              fontWeight: "600",
               cursor: "pointer",
               transition: "all 0.15s"
             }}>

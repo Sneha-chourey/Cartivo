@@ -31,7 +31,7 @@ const Navbar = () => {
   return (
     <>
       <nav style={{
-        backgroundColor: "var(--white)",
+        backgroundColor: "var(--surface)",
         borderBottom: "1px solid var(--border)",
         padding: "0 2rem",
         height: "60px",
@@ -48,20 +48,22 @@ const Navbar = () => {
           display: "flex",
           alignItems: "center",
           gap: "8px",
+          fontFamily: "var(--font-display)",
           fontWeight: "700",
           fontSize: "1.2rem",
-          color: "var(--text)"
+          color: "var(--text-h)"
         }}>
           <span style={{
             backgroundColor: "var(--primary)",
-            color: "white",
+            color: "#1C1815",
             width: "32px",
             height: "32px",
             borderRadius: "8px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "1rem"
+            fontSize: "1rem",
+            fontWeight: "700"
           }}>C</span>
           Cartivo
         </Link>
@@ -101,7 +103,7 @@ const Navbar = () => {
                   top: "-6px",
                   right: "-6px",
                   backgroundColor: "var(--primary)",
-                  color: "white",
+                  color: "#1C1815",
                   fontSize: "0.65rem",
                   fontWeight: "700",
                   width: "18px",
@@ -128,7 +130,7 @@ const Navbar = () => {
                   padding: "6px 12px",
                   border: "1px solid var(--border)",
                   borderRadius: "var(--radius-md)",
-                  backgroundColor: "var(--white)",
+                  backgroundColor: "var(--surface)",
                   cursor: "pointer",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -138,7 +140,7 @@ const Navbar = () => {
                   width: "24px",
                   height: "24px",
                   backgroundColor: "var(--primary)",
-                  color: "white",
+                  color: "#1C1815",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
@@ -157,7 +159,7 @@ const Navbar = () => {
                   position: "absolute",
                   top: "calc(100% + 8px)",
                   right: 0,
-                  backgroundColor: "var(--white)",
+                  backgroundColor: "var(--surface)",
                   border: "1px solid var(--border)",
                   borderRadius: "var(--radius-lg)",
                   boxShadow: "var(--shadow-lg)",
