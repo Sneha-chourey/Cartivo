@@ -30,12 +30,13 @@ const Dashboard = () => {
   if (loading) return <Loader />;
 
   const cards = [
-    { title: "Total Revenue", value: `₹${summary?.totalRevenue?.toLocaleString()}`, icon: "💰", change: "+12%", color: "var(--primary)" },
-    { title: "Total Orders", value: summary?.totalOrders, icon: "📦", change: "+8%", color: "#3b82f6" },
-    { title: "Total Users", value: summary?.totalUsers, icon: "👥", change: "+23%", color: "#10b981" },
-    { title: "Total Products", value: summary?.totalProducts, icon: "🛍️", change: "+4%", color: "#f59e0b" },
-    { title: "Paid Orders", value: summary?.paidOrders, icon: "✅", change: "", color: "#059669" },
-    { title: "Delivered", value: summary?.deliveredOrders, icon: "🚚", change: "", color: "#6366f1" },
+    { title: "Total Revenue", value: `₹${summary?.totalRevenue?.toLocaleString()}`, icon: "💰", color: "var(--primary)" },
+    { title: "Total Orders", value: summary?.totalOrders, icon: "📦", color: "#3b82f6" },
+    { title: "Total Users", value: summary?.totalUsers, icon: "👥", color: "#10b981" },
+    { title: "Total Products", value: summary?.totalProducts, icon: "🛍️", color: "#f59e0b" },
+    { title: "Paid Orders", value: summary?.paidOrders, icon: "✅", color: "#059669" },
+    { title: "Delivered", value: summary?.deliveredOrders, icon: "🚚", color: "#6366f1" },
+    { title: "Cancelled", value: summary?.cancelledOrders, icon: "❌", color: "var(--error)" },
   ];
 
   const getStatusBadge = (status) => {
@@ -67,18 +68,13 @@ const Dashboard = () => {
       </div>
 
       {/* Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
         {cards.map((card, i) => (
           <div key={i} className="card" style={{ padding: "1.5rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
               <div style={{ width: "40px", height: "40px", backgroundColor: "var(--background)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem" }}>
                 {card.icon}
               </div>
-              {card.change && (
-                <span style={{ fontSize: "0.75rem", fontWeight: "600", color: "var(--success)", backgroundColor: "var(--success-light)", padding: "2px 8px", borderRadius: "var(--radius-full)" }}>
-                  {card.change}
-                </span>
-              )}
             </div>
             <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginBottom: "4px" }}>{card.title}</p>
             <p style={{ fontSize: "1.6rem", fontWeight: "700", color: card.color }}>{card.value}</p>

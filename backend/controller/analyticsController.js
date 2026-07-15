@@ -11,6 +11,7 @@ const getDashboardSummary = async (req, res) => {
     const totalOrders = await Order.countDocuments();
     const paidOrders = await Order.countDocuments({ isPaid: true });
     const deliveredOrders = await Order.countDocuments({ isDelivered: true });
+    const cancelledOrders = await Order.countDocuments({ orderStatus: "Cancelled" });
 
     const revenueResult = await Order.aggregate([
       { $match: { isPaid: true } },
@@ -26,6 +27,7 @@ const getDashboardSummary = async (req, res) => {
       totalOrders,
       paidOrders,
       deliveredOrders,
+      cancelledOrders,
       totalRevenue: parseFloat(totalRevenue.toFixed(2)),
       averageOrderValue: parseFloat(averageOrderValue.toFixed(2)),
       totalUsers,
