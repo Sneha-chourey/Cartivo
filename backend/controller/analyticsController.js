@@ -9,12 +9,14 @@ import Payment from "../model/Payment.js";
 const getDashboardSummary = async (req, res) => {
   try {
     const totalOrders = await Order.countDocuments();
-    const paidOrders = await Order.countDocuments({ isPaid: true });
+    // Paid Orders now excludes cancelled ones — a cancelled order shouldn't
+    // count as active paid revenue even if it was paid before cancellation
+    const paidOrders = await Order.countDocuments({ isPaid: true, orderStatus: { $ne: "Cancelled" } });
     const deliveredOrders = await Order.countDocuments({ isDelivered: true });
     const cancelledOrders = await Order.countDocuments({ orderStatus: "Cancelled" });
 
     const revenueResult = await Order.aggregate([
-      { $match: { isPaid: true } },
+      { $match: { isPaid: true, orderStatus: { $ne: "Cancelled" } } },
       { $group: { _id: null, totalRevenue: { $sum: "$totalPrice" } } },
     ]);
     const totalRevenue = revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
@@ -49,6 +51,7 @@ const getSalesAnalytics = async (req, res) => {
       {
         $match: {
           isPaid: true,
+          orderStatus: { $ne: "Cancelled" },
           createdAt: {
             $gte: new Date(`${year}-01-01`),
             $lte: new Date(`${year}-12-31`),
@@ -88,7 +91,7 @@ const getTopSellingProducts = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
 
     const topProducts = await Order.aggregate([
-      { $match: { isPaid: true } },
+      { $match: { isPaid: true, orderStatus: { $ne: "Cancelled" } } },
       { $unwind: "$orderItems" },
       {
         $group: {
@@ -116,7 +119,7 @@ const getTopSellingProducts = async (req, res) => {
 const getRevenueByCategory = async (req, res) => {
   try {
     const categoryData = await Order.aggregate([
-      { $match: { isPaid: true } },
+      { $match: { isPaid: true, orderStatus: { $ne: "Cancelled" } } },
       { $unwind: "$orderItems" },
       {
         $lookup: {
@@ -207,7 +210,7 @@ const getRecentOrders = async (req, res) => {
 const getPaymentMethodStats = async (req, res) => {
   try {
     const stats = await Order.aggregate([
-      { $match: { isPaid: true } },
+      { $match: { isPaid: true, orderStatus: { $ne: "Cancelled" } } },
       {
         $group: {
           _id: "$paymentMethod",
